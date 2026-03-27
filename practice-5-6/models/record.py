@@ -66,10 +66,6 @@ def delete(record_id: int) -> bool:
     return remove_from_file(record_id=record_id, file_path=get_config()["RECORD_FILE"])
 
 
-def print(record: Record):
-    print(record)
-
-
 def remove_empty_strings_in_file(file_path: str) -> int:
     try:
         strings = []
