@@ -1,6 +1,6 @@
 from typing import List, Dict, TypedDict, Optional
 from config.config import get_config
-from utils.types import list_str_to_int
+from utils.types import list_str_to_int, list_int_to_str
 
 
 RECORD_KEYS = {
