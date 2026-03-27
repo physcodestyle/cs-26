@@ -30,7 +30,7 @@ def create(
         title: str = "",
         note: str = "",
         quotation: str = "",
-        source_id: str = "",
+        source_id: int = 0,
         pages: List[int] = {},
         paragraphs: List[int] = {},
         words: List[int] = {}
