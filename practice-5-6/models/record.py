@@ -66,28 +66,6 @@ def delete(record_id: int) -> bool:
     return remove_from_file(record_id=record_id, file_path=get_config()["RECORD_FILE"])
 
 
-def remove_empty_strings_in_file(file_path: str) -> int:
-    try:
-        strings = []
-        empty_string_indices = []
-        with open(file=file_path, mode="r", encoding="utf-8") as f:
-            strings = f.read().split("\n")
-        for str_index in range(len(strings)):
-            if strings[str_index] == "":
-                empty_string_indices.append(str_index)
-        f.close()
-        if len(empty_string_indices) > 0:
-            empty_string_indices.reverse()
-            for str_index in empty_string_indices:
-                strings.pop(str_index)
-        with open(file=file_path, mode="w", encoding="utf-8") as f:
-            f.write("\n".join(strings))
-        f.close()   
-    except IOError as err:
-        print(f"Error: {err}")
-        return False
-
-
 def read_from_file(record_id: int, file_path: str) -> Optional[Record]:
     try:
         strings = []
@@ -115,12 +93,15 @@ def read_from_file(record_id: int, file_path: str) -> Optional[Record]:
 def save_to_file(record: Record, file_path: str) -> bool:
     try:
         strings = []
+        empty_string_indices = []
         record_string_index = -1
         max_record_index = 0
         with open(file=file_path, mode="r", encoding="utf-8") as f:
             strings = f.read().split("\n")
         for str_index in range(len(strings)):
-            if strings[str_index] != "":
+            if strings[str_index] == "":
+                empty_string_indices.append(str_index)
+            else:
                 fields = strings[str_index].split("\t")
                 field_index = int(fields[0])
                 if record['id'] != None and field_index == record['id']:
@@ -139,6 +120,10 @@ def save_to_file(record: Record, file_path: str) -> bool:
             strings.append(new_string)
         else:
             strings[record_string_index] = new_string
+        if len(empty_string_indices) > 0:
+            empty_string_indices.reverse()
+            for str_index in empty_string_indices:
+                strings.pop(str_index)
         with open(file=file_path, mode="w", encoding="utf-8") as f:
             f.write("\n".join(strings))
         f.close()
@@ -167,7 +152,6 @@ def remove_from_file(record_id: int, file_path: str) -> bool:
         with open(file=file_path, mode="w", encoding="utf-8") as f:
             f.write("\n".join(strings))
         f.close()
-        remove_empty_strings_in_file(file_path=file_path)
         return True
     except IOError as err:
         print(f"Error: {err}")
