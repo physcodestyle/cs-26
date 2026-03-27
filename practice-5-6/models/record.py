@@ -15,7 +15,7 @@ RECORD_KEYS = {
 
 
 class Record(TypedDict):
-    id: int
+    id: Optional[int]
     title: str
     note: str
     quotation: str
@@ -26,8 +26,8 @@ class Record(TypedDict):
 
 
 def create(
-        record_id: int,
-        title: str,
+        record_id: Optional[int] = None,
+        title: str = "",
         note: str = "",
         quotation: str = "",
         source_id: str = "",
@@ -120,16 +120,26 @@ def save_to_file(record: Record, file_path: str) -> bool:
     try:
         strings = []
         record_string_index = -1
+        max_record_index = 0
         with open(file=file_path, mode="r", encoding="utf-8") as f:
             strings = f.read().split("\n")
         for str_index in range(len(strings)):
-            fields = strings[str_index].split("\t")
-            if fields[0] == str(record['id']):
-                record_string_index = str_index
-                break
+            if strings[str_index] != "":
+                fields = strings[str_index].split("\t")
+                field_index = int(fields[0])
+                if record['id'] != None and field_index == record['id']:
+                    record_string_index = str_index
+                    break
+                if field_index > max_record_index:
+                    max_record_index = field_index
         f.close()
-        new_string = f"{record['id']}\t{record['title']}\t{record['note']}\t{record['quotation']}\t{record['source_id']}\t{'-'.join(record['pages'])}\t{'-'.join(record['paragraphs'])}\t{'-'.join(record['words'])}"
-        if (record_string_index == -1):
+        new_string = f"\t{'-'.join(list_int_to_str(record['pages']))}\t{'-'.join(list_int_to_str(record['paragraphs']))}\t{'-'.join(list_int_to_str(record['words']))}"
+        new_string = f"{record['title']}\t{record['note']}\t{record['quotation']}\t{record['source_id']}" + new_string
+        if record['id'] == None:
+            new_string = f"{max_record_index + 1}\t" + new_string
+        else:
+            new_string = f"{record['id']}\t" + new_string
+        if record_string_index == -1:
             strings.append(new_string)
         else:
             strings[record_string_index] = new_string
