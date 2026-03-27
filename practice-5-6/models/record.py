@@ -6,6 +6,7 @@ from utils.types import list_str_to_int
 RECORD_KEYS = {
     "title": str,
     "note": str,
+    "quotation": str,
     "source_id": int,
     "pages": list,
     "paragraphs": list,
@@ -17,6 +18,7 @@ class Record(TypedDict):
     id: int
     title: str
     note: str
+    quotation: str
     source_id: int
     pages: List[int]
     paragraphs: List[int]
@@ -27,6 +29,7 @@ def create(
         record_id: int,
         title: str,
         note: str = "",
+        quotation: str = "",
         source_id: str = "",
         pages: List[int] = {},
         paragraphs: List[int] = {},
@@ -36,6 +39,7 @@ def create(
         id=record_id,
         title=title,
         note=note,
+        quotation=quotation,
         source_id=source_id,
         pages=pages,
         paragraphs=paragraphs,
@@ -101,10 +105,11 @@ def read_from_file(record_id: int, file_path: str) -> Optional[Record]:
                     id=int(fields[0]),
                     title=fields[1],
                     note=fields[2],
-                    source_id=int(fields[3]),
-                    pages=list_str_to_int(fields[4].split("-")),
-                    paragraphs=list_str_to_int(fields[5].split("-")),
-                    words=list_str_to_int(fields[6].split("-"))
+                    quotation=fields[3],
+                    source_id=int(fields[4]),
+                    pages=list_str_to_int(fields[5].split("-")),
+                    paragraphs=list_str_to_int(fields[6].split("-")),
+                    words=list_str_to_int(fields[7].split("-"))
                 )
         return None
     except IOError as err:
@@ -123,7 +128,7 @@ def save_to_file(record: Record, file_path: str) -> bool:
                 record_string_index = str_index
                 break
         f.close()
-        new_string = f"{record['id']}\t{record['title']}\t{record['note']}\t{record['source_id']}\t{'-'.join(record['pages'])}\t{'-'.join(record['paragraphs'])}\t{'-'.join(record['words'])}"
+        new_string = f"{record['id']}\t{record['title']}\t{record['note']}\t{record['quotation']}\t{record['source_id']}\t{'-'.join(record['pages'])}\t{'-'.join(record['paragraphs'])}\t{'-'.join(record['words'])}"
         if (record_string_index == -1):
             strings.append(new_string)
         else:
