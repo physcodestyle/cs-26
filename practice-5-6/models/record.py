@@ -1,4 +1,4 @@
-from typing import Any, List, Dict, TypedDict, Optional
+from typing import List, Dict, TypedDict, Optional
 from config.config import get_config
 from utils.types import list_str_to_int
 
@@ -52,7 +52,7 @@ def read(record_id: int) -> Optional[Record]:
     return read_from_file(record_id=record_id, file_path=get_config()["RECORD_FILE"])
 
 
-def update(record_id: int, values_dict: Dict[Any]) -> bool:
+def update(record_id: int, values_dict: Dict[str, type]) -> bool:
     updating_record = read_from_file(record_id=record_id, file_path=get_config()["RECORD_FILE"])
     if updating_record == None:
         return False
