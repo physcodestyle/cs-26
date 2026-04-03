@@ -19,10 +19,13 @@ def read_from_file(id: int, file_path: str) -> Optional[List]:
 def read_all_from_file(file_path: str) -> List[List[str]]:
     try:
         strings = []
+        matrix = []
         with open(file=file_path, mode="r", encoding="utf-8") as f:
             strings = f.read().split("\n")
         f.close()
-        return strings
+        for row in strings:
+            matrix.append(row.split("\t"))
+        return matrix
     except IOError as err:
         print(f"Error: {err}")
 
