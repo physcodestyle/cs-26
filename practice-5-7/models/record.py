@@ -32,9 +32,9 @@ def create(
         note: str = "",
         quotation: str = "",
         source_id: int = 0,
-        pages: List[int] = {},
-        paragraphs: List[int] = {},
-        words: List[int] = {}
+        pages: List[int] = [],
+        paragraphs: List[int] = [],
+        words: List[int] = []
     ) -> bool:
     new_record = Record(
         id=record_id,
