@@ -1,4 +1,12 @@
-from typing import TypedDict
+from typing import List, TypedDict
+
+
+RECORD_KEYS = {
+    "title": str,
+    "country": str,
+    "city": str,
+    "notes": list
+}
 
 
 class Publisher(TypedDict):
@@ -6,3 +14,4 @@ class Publisher(TypedDict):
     title: str
     country: str
     city: str
+    notes: List[int]
