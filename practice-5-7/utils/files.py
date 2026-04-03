@@ -16,6 +16,17 @@ def read_from_file(id: int, file_path: str) -> Optional[List]:
         print(f"Error: {err}")
 
 
+def read_all_from_file(file_path: str) -> List[List[str]]:
+    try:
+        strings = []
+        with open(file=file_path, mode="r", encoding="utf-8") as f:
+            strings = f.read().split("\n")
+        f.close()
+        return strings
+    except IOError as err:
+        print(f"Error: {err}")
+
+
 def save_to_file(entity_fields: List, file_path: str) -> bool:
     try:
         strings = []

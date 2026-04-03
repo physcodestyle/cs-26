@@ -1,7 +1,7 @@
 from typing import List, Dict, TypedDict, Optional
 from config.config import get_config
 from utils.types import list_str_to_int, list_int_to_str
-from utils.files import read_from_file, save_to_file, remove_from_file
+from utils.files import read_from_file, read_all_from_file, save_to_file, remove_from_file
 
 
 RECORD_KEYS = {
@@ -26,6 +26,23 @@ class Source(TypedDict):
     pages: List[int]
     notes: List[int]
     link: str
+
+
+def search_by_field(field_name: str, search_query: str) -> List[Source]:
+    source_list = read_all_sources_from_file()
+    search_results = []
+    if not field_name in RECORD_KEYS.keys():
+        return search_results
+    for source in source_list:
+        if RECORD_KEYS[field_name] == str and search_query in source[field_name]:
+            search_results.append(source)
+        elif RECORD_KEYS[field_name] == int and int(search_query) == source[field_name]:
+            search_results.append(source)
+        elif field_name == "pages" and int(search_query) >= source["pages"][0] and int(search_query) <= source["pages"][1]:
+            search_results.append(source)
+        elif RECORD_KEYS[field_name] == list and int(search_query) in source[field_name]:
+            search_results.append(source)
+    return search_results
 
 
 def create(
@@ -86,6 +103,26 @@ def read_source_from_file(source_id: int) -> Optional[Source]:
             link=source_fields[9]
         )
     return None
+
+
+def read_all_sources_from_file() -> List[Source]:
+    raw_sources = read_all_from_file(file_path=get_config()["SOURCE_FILE"])
+    source_list = []
+    for source_row in raw_sources:
+        source_list.append(
+            Source(
+                id=int(source_row[0]),
+                title=source_row[1],
+                publisher=source_row[3],
+                volume=source_row[4],
+                year=source_row[5],
+                issue=source_row[6],
+                pages=list_str_to_int(source_row[7].split("-")),
+                notes=list_str_to_int(source_row[8].split("-")),
+                link=source_row[9]
+            )
+        )
+    return source_list
 
 
 def save_source_to_file(source: Source) -> bool:
