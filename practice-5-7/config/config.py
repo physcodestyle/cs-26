@@ -8,6 +8,8 @@ SOURCE_FILE = 'data/source.dat'
 def get_config():
     return {
         "AUTHOR_FILE": AUTHOR_FILE,
+        "NOTE_FILE": NOTE_FILE,
         "PUBLISHER_FILE": PUBLISHER_FILE,
         "RECORD_FILE": RECORD_FILE,
+        "SOURCE_FILE": SOURCE_FILE,
     }
