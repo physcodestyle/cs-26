@@ -32,7 +32,7 @@ def search_by_field(field_name: str, search_query: str) -> List[Source]:
     source_list = read_all_sources_from_file()
     search_results = []
     if not field_name in RECORD_KEYS.keys():
-        return search_results
+        return []
     for source in source_list:
         if RECORD_KEYS[field_name] == str and search_query in source[field_name]:
             search_results.append(source)
