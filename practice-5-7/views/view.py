@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from typing import Tuple
 
 
 class View:
@@ -9,10 +9,10 @@ class View:
     def change_state(self, data: any, state: int) -> Tuple[any, int]:
         self.print_response(response=data)
         new_data = self.get_user_request(request="Default view prompt")
-        return (new_data[0], state)
+        return (new_data, state)
 
 
-    def get_user_request(self, request: str) -> List[str]:
+    def get_user_request(self, request: str) -> str:
         return input(f"{request} {self.prompt_text}").split(" ")
 
 
